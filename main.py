@@ -11,6 +11,9 @@ class LoginRequest(BaseModel):
     username: str
     password: str
 
+class AskRequest(BaseModel):
+    question: str
+
 app = FastAPI()
 
 use_cors = os.getenv('USE_CORS', 'False').lower() == 'true'
@@ -29,7 +32,11 @@ if use_cors:
 def read_health():
     return {"status": "ok"}
 
-@app.post("/login")
+@app.post("/api/ask")
+async def ask(request: AskRequest):
+    return {"status": "ok"}
+
+@app.post("/api/login")
 async def login(request: LoginRequest):
     return {"status": "ok"}
 
