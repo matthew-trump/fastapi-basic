@@ -14,6 +14,19 @@ class LoginRequest(BaseModel):
 class AskRequest(BaseModel):
     question: str
 
+
+VALID_USERS = [
+    {"username": "matt", "password": "password"},
+    {"username": "kate", "password": "password"},
+    {"username": "anne", "password": "password"},
+]
+
+def is_valid_user(user_credentials: LoginRequest) -> bool:
+    for user in VALID_USERS:
+        if user["username"] == user_credentials.username and user["password"] == user_credentials.password:
+            return True
+    return False
+
 app = FastAPI()
 
 use_cors = os.getenv('USE_CORS', 'False').lower() == 'true'
@@ -38,7 +51,7 @@ async def ask(request: AskRequest):
 
 @app.post("/api/login")
 async def login(request: LoginRequest):
-    if request.username != "matt" or request.password != "password":
+    if not is_valid_user(request):
         raise HTTPException(status_code=401, detail="Incorrect username or password")
     return {"status": "ok"}
 
