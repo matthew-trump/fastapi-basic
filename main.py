@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 import uvicorn
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
@@ -38,6 +38,8 @@ async def ask(request: AskRequest):
 
 @app.post("/api/login")
 async def login(request: LoginRequest):
+    if request.username != "matt" or request.password != "password":
+        raise HTTPException(status_code=401, detail="Incorrect username or password")
     return {"status": "ok"}
 
 if __name__ == "__main__":
